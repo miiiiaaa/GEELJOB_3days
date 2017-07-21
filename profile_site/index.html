@@ -7,11 +7,73 @@
     <link href="assets/css/font-awesome.min.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
     <link href="assets/css/plus.css" rel="stylesheet">
+    <!-- 以下にJavaScriptを記述 → -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script lang="javascript">
+  $(document).ready(
+      function() {
+        $("#clickable").click(
+            function(){
+              $(this).blur() ;	//ボタンからフォーカスを外す
+              if($("#modal-overlay")[0]) return false ;
+              // アニメーション停止
+              $('#calling').css("animation-play-state", "paused");
+              // ウィンドウ操作　オーバーレイ用のHTMLコードを、[body]内の最後に生成する
+              $("body").append('<div id="modal-overlay"></div>');
+              //[$modal-overlay]をフェードインさせる
+              $("#modal-overlay").fadeIn("slow");
+              // 位置調整
+              centeringModalSyncer();
+              //[$modal-content]をフェードインさせる
+              $("#modal-content").fadeIn("slow");
+              $("#rollframe").show();
+              // iframeの中身をリロード
+              //$("#rollframe")[0].contentDocument.location.reload();
+              $("#rollframe").attr("src", $("#rollframe").attr("src"));
+              $("#modal-overlay,#modal-close").unbind().click(function(){
+                //[#modal-overlay]と[#modal-close]をフェードアウトする
+                $("#modal-content,#modal-overlay").fadeOut("slow",function(){
+                  // アニメーション再開
+                  $('#calling').css("animation-play-state", "running");
+                  // iframe非表示
+                  $("#rollframe").hide();
+                  //フェードアウト後、[#modal-overlay]をHTML(DOM)上から削除
+                  $("#modal-overlay").remove();
+                });
+              });
+            }
+        );
+      }
+  );
 
+  function centeringModalSyncer(){
+    //画面(ウィンドウ)の幅を取得し、変数[w]に格納
+    var w = $(window).width();
+    //画面(ウィンドウ)の高さを取得し、変数[h]に格納
+    var h = $(window).height();
+    //コンテンツ(#modal-content)の幅を取得し、変数[cw]に格納
+    var cw = $("#modal-content").outerWidth();
+    //コンテンツ(#modal-content)の高さを取得し、変数[ch]に格納
+    var ch = $("#modal-content").outerHeight();
+    //コンテンツ(#modal-content)を真ん中に配置するのに、左端から何ピクセル離せばいいか？を計算して、変数[pxleft]に格納
+    var pxleft = ((w - cw)/2);
+    //コンテンツ(#modal-content)を真ん中に配置するのに、上部から何ピクセル離せばいいか？を計算して、変数[pxtop]に格納
+    var pxtop = ((h - ch)/2);
+    //[#modal-content]のCSSに[left]の値(pxleft)を設定
+    $("#modal-content").css({"left": pxleft + "px"});
+    //[#modal-content]のCSSに[top]の値(pxtop)を設定
+    $("#modal-content").css({"top": pxtop + "px"});
+  }
+  </script>
   </head>
 
   <body>
-    
+    <!-- 隠しウィンドウ（フローティングウィンドウ）部分 -->
+<div id="modal-content">
+  <!-- message.htmlを読み込むためのiframe -->
+  <iframe id="rollframe" sandbox="allow-scripts" src="message.html"></iframe>
+  <p><a id="modal-close" class="button-link">閉じる</a></p>
+</div>
     <!-- メニューバー -->
         <div class="navbar navbar-inverse navbar-fixed-top">
           <div class="container">

@@ -4,7 +4,8 @@
 
 /* OVERALL ASPECT */
 
-body{
+body
+{
   background-color: #f2f2f2;
     font-family: "Lato";
     font-weight: 300;
@@ -110,9 +111,9 @@ p {
 
 .navbar {
 /*文字サイズを変えることができます*/
-	font-size: 14px;
+	font-size: 16px;
 /*メニューバーの背景色を変えることができます*/
-  background: #1225;
+  background: #152447;
 	padding-top: 15px;
 	padding-bottom: 15px;
   font-weight: 800;
